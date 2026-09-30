@@ -66,4 +66,7 @@ Solicitações de produtos personalizados são encaminhadas ao atendimento confo
 
 ## Execução local
 
+# LINK NOTION
+URL: https://salty-prawn-0c1.notion.site/Projeto-ELG-Caixas-e-Pain-is-El-tricos-3ea700329ea5809eaf04c6ab8ba819f0
+
 As instruções de instalação e execução serão adicionadas após a criação da estrutura inicial da aplicação.
