@@ -69,3 +69,22 @@ class Produto(models.Model):
     )
     def __str__(self):
         return self.nome
+
+class ProdutoImagem(models.Model):
+    produto = models.ForeignKey(
+        Produto,
+        on_delete = models.CASCADE,
+        related_name = "imagens"
+    )
+    url_imagem = models.TextField()
+    texto_alternativo = models.CharField(
+        max_length = 255,
+        blank = True
+    )
+    ordem = models.IntegerField(
+        default = 0
+    )
+    def __str__(self):
+        return f"Imagem {self.id} - {self.produto}"
+
+
