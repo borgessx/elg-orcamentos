@@ -107,3 +107,38 @@ class Orcamento(models.Model):
     def __str__(self):
         return f"{self.protocolo - {self.cliente_nome_snapshot}}"
 
+class OrcamentoItem(models.Model):
+    orcamento = models.ForeignKey(
+        Orcamento,
+        on_delete = models.CASCADE,
+        related_name = "itens"
+    )
+    produto = models.ForeignKey(
+        Produto,
+        on_delete = models.PROTECT,
+        related_name="itens_orcamento"
+    )
+    produto_codigo_snapshot = models.CharField(
+        max_length=50
+    )
+    produto_nome_snapshot = models.CharField(
+        max_length = 150
+    )
+    especificacoes_snapshot = models.TextField()
+    quantidade = models.IntegerField()
+    preco_unitario=models.DecimalField(
+        max_digits=12,
+        decimal_places=2
+    )
+    subtotal=models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        editable=False
+    )
+    def save(self,*args, **kwargs):
+        self.subtotal = self.preco_unitario * self.quantidade
+        super().save(*args,**kwargs)
+    def __str__(self):
+        return f"{self.produto_nome_snapshot} - Quantidade: {self.quantidade}"
+
+    
