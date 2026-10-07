@@ -63,3 +63,47 @@ class SolicitacaoPersonalizada(models.Model):
     def __str__(self):
         return f"{self.protocolo} - {self.cliente.nome_razao_social}"
     
+class Orcamento(models.Model):
+    cliente = models.ForeignKey(
+        Cliente,
+        on_delete = models.PROTECT,
+        related_name = "orcamento"
+    )
+    usuario_responsavel = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.PROTECT,
+        related_name="orcamentos_responsavel"
+    )
+    protocolo = models.CharField(
+        max_length=50,
+        unique=True
+    )
+    status = models.CharField(
+        max_length = 30
+    )
+    cliente_nome_snapshot = models.CharField(
+        max_length = 150 
+    )
+    cliente_documento_snapshot = models.CharField(
+        max_length = 14
+    )
+    cliente_email_snapshot = models.EmailField()
+    cliente_telefone_snapshot = models.CharField(
+        max_length = 20
+    )
+    endereco_snapshot = models.TextField()
+    valor_total = models.DecimalField(
+        max_digits=12,
+        decimal_places=2
+    )
+    observacoes=models.TextField()
+    validade = models.DateField()
+    criado_em = models.DateTimeField(
+        auto_now_add=True
+    )
+    atualizado_em=models.DateTimeField(
+        auto_now=True
+    )
+    def __str__(self):
+        return f"{self.protocolo - {self.cliente_nome_snapshot}}"
+
