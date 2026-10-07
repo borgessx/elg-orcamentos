@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from clientes.models import Cliente
 from produtos.models import Produto
 
@@ -33,3 +34,32 @@ class ListaOrcamentoItem(models.Model):
     def __str__(self):
         return f"{self.produto.nome} - Quantidade:{self.quantidade}"
 
+class SolicitacaoPersonalizada(models.Model):
+    cliente = models.ForeignKey(
+        Cliente,
+        on_delete=models.PROTECT,
+        related_name="solicitacoe_personalizadas"
+    )
+    usuario_responsavel = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="solicitacoes_responsavel"
+    )
+    protocolo = models.CharField(
+        max_length=50,
+        unique=True
+    )
+    descricao = models.TextField()
+    quantidade = models.IntegerField()
+    status = models.CharField(
+        max_length=30
+    )
+    criado_em = models.DateTimeField(
+        auto_now_add=True
+    )
+    atualizado_em = models.DateTimeField(
+        auto_now=True
+    )
+    def __str__(self):
+        return f"{self.protocolo} - {self.cliente.nome_razao_social}"
+    
