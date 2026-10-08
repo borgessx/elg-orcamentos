@@ -12,3 +12,14 @@ class configuracao(models.Model):
     )
     def __str__(self):
         return self.chave
+    
+class ContadorProtocolo(models.Model):
+    tipo = models.CharField(
+        max_length=30,
+    )
+    ano = models.IntegerField()
+    ultimo_numero=models.BigIntegerField(
+        default=0
+    )
+    def __str__(self):
+        return f"{self.tipo} - {self.ano}: {self.ultimo_numero}"
