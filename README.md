@@ -55,9 +55,9 @@ Solicitações de produtos personalizados são encaminhadas ao atendimento confo
 ## Etapas de desenvolvimento
 
 - [x] Definição do escopo da primeira versão.
-- [ ] Modelagem do banco de dados — DER.
-- [ ] Estruturação do projeto Django.
-- [ ] Implementação do banco de dados.
+- [x] Modelagem do banco de dados — DER.
+- [x] Estruturação do projeto Django.
+- [x] Implementação do banco de dados.
 - [ ] Desenvolvimento do catálogo.
 - [ ] Desenvolvimento do fluxo de orçamentos.
 - [ ] Desenvolvimento da área interna.
