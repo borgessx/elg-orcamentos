@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "produtos",
     "orcamentos",
     "configuracoes",
+    "auditoria",
 ]
 
 MIDDLEWARE = [
