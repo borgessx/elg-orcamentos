@@ -105,7 +105,7 @@ class Orcamento(models.Model):
         auto_now=True
     )
     def __str__(self):
-        return f"{self.protocolo - {self.cliente_nome_snapshot}}"
+        return f"{self.protocolo} - {self.cliente_nome_snapshot}"
 
 class OrcamentoItem(models.Model):
     orcamento = models.ForeignKey(
