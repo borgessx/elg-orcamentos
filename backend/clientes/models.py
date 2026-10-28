@@ -9,7 +9,7 @@ class Cliente(models.Model):
         choices=TipoPessoa.choices
     )
     nome_razao_social = models.CharField(
-        max_length=20
+        max_length=200
     )
     nome_fantasia = models.CharField(
         max_length=150,
