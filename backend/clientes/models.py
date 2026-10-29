@@ -33,7 +33,7 @@ class Cliente(models.Model):
         auto_now_add=True
     )
     atualizado_em = models.DateTimeField(
-        auto_now_add=True
+        auto_now=True
     )
     def __str__(self):
         return self.nome_razao_social
