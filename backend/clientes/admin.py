@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Cliente, Endereco
 
+class EnderecoInline(admin.StackedInline):
+    model = Endereco
+    extra = 1
+
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
     list_display = (
@@ -21,6 +25,8 @@ class ClienteAdmin(admin.ModelAdmin):
 
     readonly_fields = ("criado_em","atualizado_em")
 
+    inlines = (EnderecoInline,)
+    
     class Media:
         js = ("clientes/js/cliente_admin.js",)
 
