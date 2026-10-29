@@ -1,10 +1,19 @@
 from django.contrib import admin
 from .models import ListaOrcamento, ListaOrcamentoItem,SolicitacaoPersonalizada,Orcamento,OrcamentoItem
-# Register your models here.
+
+class OrcamentosItemInline(admin.StackedInline):
+    model = OrcamentoItem
+    extra = 1
+    readonly_fields = ("subtotal",)
+
+@admin.register(Orcamento)
+class OrcamentoAdmin(admin.ModelAdmin):
+    inlines = (OrcamentosItemInline,)
+
 admin.site.register(ListaOrcamento)
 admin.site.register(ListaOrcamentoItem)
 admin.site.register(SolicitacaoPersonalizada)
-admin.site.register(Orcamento)
+
 class OrcamentoItemAdmin(admin.ModelAdmin):
     readonly_field=("subtotal",)
     list_display=(
