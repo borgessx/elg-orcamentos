@@ -4,7 +4,7 @@ from clientes.models import Cliente
 from produtos.models import Produto
 from django.db.models import Sum
 from decimal import Decimal
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinValueValidator
 
 class ListaOrcamento(models.Model):
     cliente = models.ForeignKey(
@@ -96,7 +96,9 @@ class Orcamento(models.Model):
     endereco_snapshot = models.TextField()
     valor_total = models.DecimalField(
         max_digits=12,
-        decimal_places=2
+        decimal_places=2,
+        default=0,
+        editable=False,
     )
     observacoes=models.TextField()
     validade = models.DateField()
@@ -138,7 +140,7 @@ class OrcamentoItem(models.Model):
 
     quantidade = models.IntegerField(
         validators=[
-            MinLengthValidator(
+            MinValueValidator(
                 1,
                 message="A quantidade deve ser pelo menos 1."
             )
@@ -149,7 +151,7 @@ class OrcamentoItem(models.Model):
         max_digits=12,
         decimal_places=2,
         validators=[
-            MinLengthValidator(
+            MinValueValidator(
                 Decimal("0.00"),
                 message="O preço unitário não pode ser negativo."
             )
@@ -167,6 +169,10 @@ class OrcamentoItem(models.Model):
             models.CheckConstraint(
                 condition = models.Q(quantidade__gte=1),
                 name="orc_item_quantidade_gte_1",
+            ),
+            models.CheckConstraint(
+                condition = models.Q(preco_unitario__gte=0),
+                name="orc_item_preco_gte_0",
             ),
         ]
     def save(self,*args, **kwargs):
