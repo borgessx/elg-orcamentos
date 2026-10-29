@@ -3,7 +3,9 @@ from django.conf import settings
 from clientes.models import Cliente
 from produtos.models import Produto
 from django.db.models import Sum
-# Create your models here.
+from decimal import Decimal
+from django.core.validators import MinLengthValidator
+
 class ListaOrcamento(models.Model):
     cliente = models.ForeignKey(
         Cliente,
@@ -133,16 +135,40 @@ class OrcamentoItem(models.Model):
         max_length = 150
     )
     especificacoes_snapshot = models.TextField()
-    quantidade = models.IntegerField()
+
+    quantidade = models.IntegerField(
+        validators=[
+            MinLengthValidator(
+                1,
+                message="A quantidade deve ser pelo menos 1."
+            )
+        ]
+    )
+
     preco_unitario=models.DecimalField(
         max_digits=12,
-        decimal_places=2
+        decimal_places=2,
+        validators=[
+            MinLengthValidator(
+                Decimal("0.00"),
+                message="O preço unitário não pode ser negativo."
+            )
+        ]
     )
+
     subtotal=models.DecimalField(
         max_digits=12,
         decimal_places=2,
         editable=False
     )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition = models.Q(quantidade__gte=1),
+                name="orc_item_quantidade_gte_1",
+            ),
+        ]
     def save(self,*args, **kwargs):
         self.subtotal = self.preco_unitario * self.quantidade
         super().save(*args,**kwargs)
