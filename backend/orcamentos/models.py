@@ -84,7 +84,7 @@ class Orcamento(models.Model):
         max_length = 30
     )
     cliente_nome_snapshot = models.CharField(
-        max_length = 150 
+        max_length = 200
     )
     cliente_documento_snapshot = models.CharField(
         max_length = 14
