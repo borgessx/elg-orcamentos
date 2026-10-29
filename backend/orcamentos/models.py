@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from clientes.models import Cliente
 from produtos.models import Produto
-
+from django.db.models import Sum
 # Create your models here.
 class ListaOrcamento(models.Model):
     cliente = models.ForeignKey(
@@ -104,6 +104,14 @@ class Orcamento(models.Model):
     atualizado_em=models.DateTimeField(
         auto_now=True
     )
+    def recalcular_total(self):
+        resultado = self.itens.aggregate(
+            total = Sum("subtotal",default=0)
+        )
+        self.valor_total = resultado["total"]
+        self.save(
+            update_fields=["valor_total","atualizado_em"]
+        )
     def __str__(self):
         return f"{self.protocolo} - {self.cliente_nome_snapshot}"
 
