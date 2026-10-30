@@ -146,12 +146,16 @@ class OrcamentoItem(models.Model):
         related_name="itens_orcamento"
     )
     produto_codigo_snapshot = models.CharField(
-        max_length=50
+        max_length=50,
+        editable=False,
     )
     produto_nome_snapshot = models.CharField(
-        max_length = 150
+        max_length=150,
+        editable=False,
     )
-    especificacoes_snapshot = models.TextField()
+    especificacoes_snapshot = models.TextField(
+        editable=False,
+    )
 
     quantidade = models.IntegerField(
         validators=[
@@ -190,9 +194,38 @@ class OrcamentoItem(models.Model):
                 name="orc_item_preco_gte_0",
             ),
         ]
-    def save(self,*args, **kwargs):
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            produto = self.produto
+
+            self.produto_codigo_snapshot = produto.codigo
+            self.produto_nome_snapshot = produto.nome
+
+            especificacoes = [
+                f"Altura: {produto.altura_mm} mm",
+                f"Largura: {produto.largura_mm} mm",
+                f"Profundidade: {produto.profundidade_mm} mm",
+                f"Material: {produto.material}",
+                f"Espessura: {produto.espressura_mm} mm",
+                f"Acabamento: {produto.acabamento}",
+            ]
+
+            if produto.descricao:
+                especificacoes.append(
+                    f"Descrição: {produto.descricao}"
+                )
+
+            self.especificacoes_snapshot = "\n".join(especificacoes)
+
         self.subtotal = self.preco_unitario * self.quantidade
-        super().save(*args,**kwargs)
+
+        if kwargs.get("update_fields") is not None:
+            kwargs["update_fields"] = set(kwargs["update_fields"]) | {
+                "subtotal"
+            }
+
+        super().save(*args, **kwargs)
     def __str__(self):
         return f"{self.produto_nome_snapshot} - Quantidade: {self.quantidade}"
 
