@@ -84,14 +84,19 @@ class Orcamento(models.Model):
         max_length = 30
     )
     cliente_nome_snapshot = models.CharField(
-        max_length = 200
+        max_length = 200,
+        editable=False,
     )
     cliente_documento_snapshot = models.CharField(
-        max_length = 14
+        max_length = 14,
+        editable=False,
     )
-    cliente_email_snapshot = models.EmailField()
+    cliente_email_snapshot = models.EmailField(
+        editable=False,
+    )
     cliente_telefone_snapshot = models.CharField(
-        max_length = 20
+        max_length = 20,
+        editable=False,
     )
     endereco_snapshot = models.TextField()
     valor_total = models.DecimalField(
@@ -108,6 +113,16 @@ class Orcamento(models.Model):
     atualizado_em=models.DateTimeField(
         auto_now=True
     )
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.cliente_nome_snapshot = self.cliente.nome_razao_social
+            self.cliente_documento_snapshot = self.cliente.cpf_cnpj
+            self.cliente_email_snapshot = self.cliente.email
+            self.cliente_telefone_snapshot = self.cliente.telefone
+
+        super().save(*args, **kwargs)
+
     def recalcular_total(self):
         resultado = self.itens.aggregate(
             total = Sum("subtotal",default=0)

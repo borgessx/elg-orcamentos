@@ -10,6 +10,23 @@ class OrcamentosItemInline(admin.StackedInline):
 class OrcamentoAdmin(admin.ModelAdmin):
     inlines = (OrcamentosItemInline,)
 
+    readonly_fields = (
+        "valor_total",
+        "cliente_nome_snapshot",
+        "cliente_documento_snapshot",
+        "cliente_email_snapshot",
+        "cliente_telefone_snapshot",
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        campos = super().get_readonly_fields(request, obj)
+
+        if obj is not None:
+            return campos + ("cliente",)
+
+        return campos
+    
+
 admin.site.register(ListaOrcamento)
 admin.site.register(ListaOrcamentoItem)
 admin.site.register(SolicitacaoPersonalizada)
